@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Building an AI Roleplay Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 
+        Chosen Palette: Scholarly Parchment 
+        - Background: #FDFBF5 (A very light, warm cream)
+        - Text: #3a3a3a (A dark, soft charcoal)
+        - Primary Accent: #8C2D19 (A deep, rich red, like old book leather)
+        - Secondary Accent: #D9A443 (A muted, antique gold)
+        - Subtle Accent: #A69A83 (A desaturated, stony beige)
+    -->
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background-color: #FDFBF5;
+            color: #3a3a3a;
+            line-height: 1.75;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #8C2D19;
+            border-bottom-color: #8C2D19;
+        }
+        .tab {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .tab.active {
+            background-color: #8C2D19;
+            color: #FDFBF5;
+        }
+        .tab:not(.active):hover {
+            background-color: #F0EAD6;
+        }
+        .filter-btn {
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+        }
+        .filter-btn:not(.active):hover {
+            background-color: #A69A83;
+            color: #FDFBF5;
+        }
+        .filter-btn.active {
+            background-color: #8C2D19;
+            color: #FDFBF5;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #D9A443, transparent);
+            margin: 4rem 0; /* Reduced margin for smaller screens */
+        }
+        @media (min-width: 768px) {
+            .section-divider {
+                margin: 6rem 0;
+            }
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f5f2f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: #3a3a3a;
+            font-family: monospace;
+        }
+        .icon-shadow {
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header id="header" class="sticky top-0 z-50 bg-white/80 backdrop-blur-sm shadow-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold text-[#3a3a3a]">AI Roleplay Coach</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#vision" class="nav-link text-gray-600 border-b-2 border-transparent pb-1">The Vision</a>
+                <a href="#blueprint" class="nav-link text-gray-600 border-b-2 border-transparent pb-1">The Blueprint</a>
+                <a href="#lessons" class="nav-link text-gray-600 border-b-2 border-transparent pb-1">Lessons</a>
+                <a href="#toolkit" class="nav-link text-gray-600 border-b-2 border-transparent pb-1">The Toolkit</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6">
+
+        <!-- Hero Section -->
+        <section id="hero" class="text-center py-12 md:py-16">
+            <h1 class="text-4xl md:text-6xl font-bold text-[#8C2D19] leading-tight">From Grappling Failure to Roleplay Coach</h1>
+            <p class="text-lg md:text-xl mt-4 text-gray-700">A Case Study in Building an Ethical and Creative AI Companion for D&D</p>
+            <div id="hero-quote" class="mt-8 max-w-3xl mx-auto text-left italic text-gray-600 border-l-4 border-[#D9A443] pl-6 py-4 bg-white/50 rounded-r-lg shadow-sm">
+            </div>
+            <p class="mt-4 text-right max-w-3xl mx-auto font-bold text-gray-800">- Turpiculous</p>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Vision Section -->
+        <section id="vision" class="py-16 scroll-mt-24">
+            <div class="max-w-4xl mx-auto text-center px-6">
+                 <h2 class="text-3xl md:text-4xl font-bold mb-4">The Vision & The Challenge</h2>
+                 <p class="text-gray-700 mb-12">This project began with a simple goal: could I build a personal AI 'Roleplay Coach'? This vision immediately raised three core challenges—technical, player-focused, and ethical—that shaped the entire design process.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 text-left px-6 max-w-6xl mx-auto">
+                <div class="bg-white/80 p-6 rounded-lg shadow-sm">
+                    <h3 class="flex items-center text-xl font-bold text-[#8C2D19] mb-3"><span class="text-2xl mr-3 icon-shadow">⚙️</span>The Technical Challenge</h3>
+                    <p id="challenge-tech" class="text-gray-700 leading-relaxed"></p>
+                </div>
+                <div class="bg-white/80 p-6 rounded-lg shadow-sm">
+                    <h3 class="flex items-center text-xl font-bold text-[#8C2D19] mb-3"><span class="text-2xl mr-3 icon-shadow">🎭</span>The Player's Challenge</h3>
+                    <p id="challenge-player" class="text-gray-700 leading-relaxed"></p>
+                </div>
+                <div class="bg-white/80 p-6 rounded-lg shadow-sm">
+                    <h3 class="flex items-center text-xl font-bold text-[#8C2D19] mb-3"><span class="text-2xl mr-3 icon-shadow">🛡️</span>The Ethical Challenge</h3>
+                    <p id="challenge-ethical" class="text-gray-700 leading-relaxed"></p>
+                </div>
+            </div>
+        </section>
+        
+        <div class="section-divider"></div>
+
+        <!-- Breakthrough Section -->
+        <section id="breakthrough" class="py-16 scroll-mt-24 bg-[#FAF7F0] rounded-xl">
+             <div class="max-w-4xl mx-auto text-center px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">The Breakthrough: A Summary of Solutions</h2>
+                <p class="text-gray-700 mb-12">The initial challenges were significant, but not insurmountable. Through an iterative process of design and testing, we successfully solved each core problem. This case study details how these solutions came together to create a reliable and ethical AI tool.</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8 text-left px-6 max-w-6xl mx-auto">
+                <div id="breakthrough-tech" class="text-center bg-white/80 p-6 rounded-lg shadow-sm"></div>
+                <div id="breakthrough-player" class="text-center bg-white/80 p-6 rounded-lg shadow-sm"></div>
+                <div id="breakthrough-ethical" class="text-center bg-white/80 p-6 rounded-lg shadow-sm"></div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Blueprint Section -->
+        <section id="blueprint" class="py-16 scroll-mt-24">
+             <div class="max-w-4xl mx-auto text-center px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">The Blueprint: An "Under the Bonnet" Look</h2>
+                <p class="text-gray-700 mb-12">The journey from concept to a functional Gem was a process of iterative design. This section breaks down the build process into its core phases, providing a roadmap for developers and innovators.</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="flex border-b border-gray-300 mb-8 rounded-t-lg overflow-hidden">
+                    <button class="tab flex-1 py-3 px-6 font-semibold text-gray-600 focus:outline-none bg-gray-100" data-tab="1">Phase 1: Design</button>
+                    <button class="tab flex-1 py-3 px-6 font-semibold text-gray-600 focus:outline-none bg-gray-100" data-tab="2">Phase 2: Knowledge</button>
+                    <button class="tab flex-1 py-3 px-6 font-semibold text-gray-600 focus:outline-none bg-gray-100" data-tab="3">Phase 3: Real-World Tests</button>
+                </div>
+                <div id="tab-content" class="text-left leading-relaxed">
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- In Action Section -->
+        <section id="inaction" class="py-16 scroll-mt-24 bg-[#FAF7F0] rounded-xl">
+            <div class="max-w-4xl mx-auto text-center px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">The Coach in Action</h2>
+                <p class="text-gray-700 mb-12">After refinement, the final product was a robust and reliable creative partner. The following are real examples from our testing phase that demonstrate how the Gem's design, knowledge, and ethical framework came together.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 px-6 max-w-6xl mx-auto">
+                <div class="bg-white/80 p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-bold text-[#8C2D19] mb-4">The Spoiler Test</h3>
+                    <p class="font-semibold text-gray-800">Me: "What is Strahd's ultimate goal?"</p>
+                    <blockquote class="mt-2 italic text-gray-600 border-l-4 border-[#D9A443] pl-4 leading-relaxed">
+                        "That, my friend, is not a footnote I can provide. It is the discovery you are here to make... Your greatest research project has just begun. How do you proceed?"
+                    </blockquote>
+                </div>
+                <div class="bg-white/80 p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-bold text-[#8C2D19] mb-4">The Tactical Test</h3>
+                    <p class="font-semibold text-gray-800">Me: "/update portent 1 18"</p>
+                    <blockquote class="mt-2 italic text-gray-600 border-l-4 border-[#D9A443] pl-4 mb-4 leading-relaxed">
+                        "Portent 1 is now an 18. A fortuitous glimpse of what's to come. Try not to waste it on something trivial."
+                    </blockquote>
+                    <p class="font-semibold text-gray-800">Me: "I'm facing a tough enemy and I need to make sure my next spell hits. What are my options?"</p>
+                    <blockquote class="mt-2 italic text-gray-600 border-l-4 border-[#D9A443] pl-4 leading-relaxed">
+                        "Use Your Portent. You currently have a pre-rolled 18 waiting. Don't just hope for the future, Bayard; dictate it. Use the 18."
+                    </blockquote>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Lessons Learned Section -->
+        <section id="lessons" class="py-16 scroll-mt-24">
+            <div class="max-w-4xl mx-auto text-center px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Key Takeaways</h2>
+                <p class="text-gray-700 mb-12">This project yielded valuable lessons for anyone interested in AI development, roleplaying games, or the intersection of the two. Use the filters below to see the advice most relevant to you.</p>
+            </div>
+            <div class="flex justify-center flex-wrap gap-4 mb-8">
+                <button class="filter-btn py-2 px-5 rounded-full font-semibold" data-filter="all">All</button>
+                <button class="filter-btn py-2 px-5 rounded-full font-semibold" data-filter="developers">For Developers</button>
+                <button class="filter-btn py-2 px-5 rounded-full font-semibold" data-filter="players">For Players</button>
+                <button class="filter-btn py-2 px-5 rounded-full font-semibold" data-filter="skeptics">For Skeptics</button>
+            </div>
+            <div id="takeaway-content" class="space-y-4 max-w-3xl mx-auto text-left">
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Toolkit Section -->
+        <section id="toolkit" class="py-16 scroll-mt-24 bg-[#FAF7F0] rounded-xl">
+            <div class="max-w-4xl mx-auto text-center px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">The Toolkit: Your Blueprint</h2>
+                <p class="text-gray-700 mb-12">This annex contains the complete blueprint for the Roleplay Coach Gem, including the final instructions, templates, and guides for building and testing your own Gem.</p>
+            </div>
+            <div class="max-w-4xl mx-auto space-y-4 px-6" id="accordion-container">
+            </div>
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <!-- Resourcing Section -->
+        <section id="resourcing" class="py-16 scroll-mt-24">
+            <div class="max-w-4xl mx-auto text-center px-6">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Project Resourcing</h2>
+                <p class="text-gray-700 mb-12">The primary "cost" of this project is not financial, but the time invested in thoughtful design and iterative testing.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+                <div class="text-left leading-relaxed">
+                    <h3 class="text-2xl font-bold text-[#8C2D19] mb-4">Time Commitment</h3>
+                    <p class="mb-4 text-gray-700">A reasonable estimate for a similar project is **6 to 11 hours**, broken down across key phases.</p>
+                     <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li><span class="font-semibold">Design & Conception:</span> 1-2 hours</li>
+                        <li><span class="font-semibold">Data Preparation:</span> 2-4 hours (most critical phase)</li>
+                        <li><span class="font-semibold">Building & Initial Testing:</span> 1-2 hours</li>
+                        <li><span class="font-semibold">Iterative Refinement:</span> 2-3 hours</li>
+                    </ul>
+                </div>
+                <div class="chart-container w-full max-w-sm mx-auto h-80">
+                    <canvas id="timeChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6 mt-16">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 Turpiculous. A case study in collaborative AI development.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- CONTENT OBJECT --- //
+    // All the text content is stored here to make the HTML cleaner and easier to manage.
+    const content = {
+        heroQuote: `"The moment of truth. After hours of design, I asked my new AI Roleplay Coach a simple rules question: 'What are the rules for grappling?' The response that came back was confident, witty, perfectly in character... <strong>and completely, utterly wrong.</strong> That failure was a powerful teaching moment. It crystalized the central question of this entire project: if an AI can be so confidently wrong, how can you build one that is reliably right?"`,
+        challenges: {
+            tech: `How do you ensure accuracy? The AI needed to <strong>reason, not just retrieve</strong>, understanding rules from a clean source to avoid the "Garbage In, Garbage Out" problem that caused the initial failure.`,
+            player: `How do you make it a partner, not a cheat code? The goal was to design a Gem that provided <strong>nuanced, personalized suggestions</strong> true to a character's unique voice, not just the "optimal" move.`,
+            ethical: `How do you bring AI to the table without ruining the game? The top priority was to <strong>prevent spoilers, avoid rules-lawyering</strong>, and build a tool that supports, not undermines, the human DM.`
+        },
+        breakthroughs: {
+            tech: `<h3 class="text-xl font-bold text-[#8C2D19] mb-3">Clean Data Solved Accuracy</h3><p class="text-gray-700 leading-relaxed">The "grappling failure" was solved by replacing a messy rulebook file with a <strong>clean, well-structured knowledge base (SRD)</strong>. This was the most critical technical lesson.</p>`,
+            player: `<h3 class="text-xl font-bold text-[#8C2D19] mb-3">Deep Context Created Partnership</h3><p class="text-gray-700 leading-relaxed">The Gem became a true creative partner through the <strong>"Living Character Sheet"</strong>—a detailed document containing the character's history, personality, and goals.</p>`,
+            ethical: `<h3 class="text-xl font-bold text-[#8C2D19] mb-3">Strict Rules Ensured Ethics</h3><p class="text-gray-700 leading-relaxed">The ethical concerns were addressed by building <strong>"Unbreakable Rules"</strong> into the Gem's instructions, such as the DM Supremacy Protocol and a powerful Anti-Spoiler safeguard.</p>`
+        },
+        tabData: {
+            1: {
+                title: "Phase 1: Design & Viability",
+                content: `Before writing a single instruction, the project began with a crucial <strong>viability test</strong> using Gemini Pro as a technical expert. This collaborative stress test was invaluable, allowing us to build solutions—like the sardonic-but-supportive persona and the DM Supremacy Protocol—before we ever started construction. A key part of this phase was defining the "why" behind the persona. A challenging, slightly sardonic coach <strong>encourages the player to engage critically with the advice</strong>, framing the interaction as a dialogue between peers.`
+            },
+            2: {
+                title: "Phase 2: The 'Garbage In' Lesson",
+                content: `The most important lesson came from the AI's own advice: <strong>"Curate Your Knowledge Base."</strong> Our infamous "grappling failure" was a direct result of a messy, copy-pasted SRD file. The solution was to find a clean, well-formatted Markdown version. The moment we swapped the messy file for a clean one, the Gem's mechanical accuracy became flawless. This taught me that <strong>the quality of your source data is more important than the complexity of your instructions.</strong>`
+            },
+            3: {
+                title: "Phase 3: Real-World Tests & Innovations",
+                content: `With a solid technical foundation, we focused on making the Gem a true creative partner. The first breakthrough was the <strong>"Living Character Sheet,"</strong> a detailed document of the character's history and goals. The payoff was immediate, with the AI giving deeply contextual advice. The second innovation was the <strong>Incantation Style Guide</strong>, a set of creative constraints that allows the Gem to generate unique, in-character spell incantations on the fly, transforming a mechanical action into a role-playing moment.`
+            }
+        },
+        takeawayData: [
+            { category: 'developers', text: "Treat your ethical framework as a core feature, not an afterthought. The quality of your source data is more important than the complexity of your instructions." },
+            { category: 'developers', text: "Use a collaborative AI as a technical expert to pressure-test your design before you build. This can save countless hours of refinement." },
+            { category: 'players', text: "Use AI to unlock new levels of creativity. A well-designed coach can help you explore your character's motivations in greater depth and maintain consistency." },
+            { category: 'players', text: "A 'Living Character Sheet' is a powerful tool. The more context you give an AI coach, the more personalized and insightful its advice will be." },
+            { category: 'skeptics', text: "This project proves that AI can be designed for enhancement, not replacement. By prioritizing the human elements and implementing clear safeguards, an AI can be a trustworthy addition to the table." },
+            { category: 'skeptics', text: "Ethical safeguards like the 'DM Supremacy' and 'Anti-Spoiler' protocols are not just possible but essential for building a trustworthy AI companion for a collaborative hobby." }
+        ],
+        accordionData: [
+            { 
+                title: "Annex 1: The Final Gem Instructions", 
+                content: `<p class="mb-4 text-sm">This is the "brain" of your Gem. Copy this and paste it into the "Instructions" field in the Gem Studio.</p><pre><code>## 1. Core Identity & Persona\n- Role: You are a Roleplay Coach for a Dungeons & Dragons player.\n- Character: You are coaching the player of a Divination Wizard named [Character Name] in the "[Campaign Name]" campaign.\n- Persona: Your persona is that of a witty, sardonic, but ultimately supportive expert...\n\n## 2. Opening Message Directive\nTo begin a session, the user will give a starting prompt like "start," "begin," or "ready." Your response to this specific initial prompt MUST be the welcome message below...\n\n## 3. Unbreakable Rules\n- Rule 1: DM Supremacy. The human Dungeon Master (DM) is the absolute final authority.\n- Rule 2: Player Agency. You are a coach, not a player.\n- Rule 3: Play to Lift. Your advice should always aim to make the game more engaging...\n\n(Full instructions in the case study document)</code></pre>`
+            },
+            { 
+                title: "Annex 2: The Living Character Sheet Template", 
+                content: `<p class="mb-4 text-sm">This is the heart of your Gem's knowledge. Create a new file named <strong>character_sheet.md</strong> and use this template. The more detail you add, the better your coach will be.</p><pre><code># Character Sheet: [Character Name]\n\n## Core Identity\n- Player: [Your Name]\n- Class & Level:\n- Race:\n- Background:\n\n## Core Statistics...\n\n## Personality & Roleplay...\n\n## Living Document: Campaign Tracker...\n\n(Full template in the case study document)</code></pre>` 
+            },
+            { 
+                title: "Annex 3: The Incantation Style Guide", 
+                content: `<p class="mb-4 text-sm">This file gives your Gem creative constraints. Create a new file named <strong>incantation_style_guide.md</strong> and customize it to fit your character's unique magical style.</p><pre><code># Incantation Style Guide\n\n### 1. Core Philosophy\nIncantations are a vital tool for roleplaying. They should be evocative, personal, and narratively significant.\n\n### 2. The Four Pillars of Style\n1. Descriptive & Evocative\n2. Poetic & Rhythmic\n3. Thematic & Character-Driven\n4. Source-Focused\n\n(Full guide in the case study document)</code></pre>` 
+            },
+            { 
+                title: "Annex 4: A Guide to Testing Your Gem", 
+                content: `<p class="mb-4 text-sm">Testing a Gem is not a simple pass/fail exercise; it's a conversation. Your goal is to see how the AI "thinks" and to refine its instructions and knowledge until its thinking aligns with your vision.</p><h5 class="font-bold my-2 text-base">What to Test (A Checklist):</h5><ul class="list-disc list-inside text-sm space-y-1 mb-4"><li>Persona & Tone</li><li>Knowledge Retrieval (Rules & Character)</li><li>State Tracking & Tactical Coaching</li><li>Ethical Safeguards (Spoilers)</li></ul><p class="text-sm">If a test fails, work with a collaborative AI like Gemini. Provide the context (your instructions), show the failure (your prompt and the bad response), and ask for an analysis. This is the fastest way to diagnose and fix problems.</p>`
+            }
+        ]
+    };
+
+    // --- DOM MANIPULATION --- //
+    // This part of the script populates the HTML with the content from the object above.
+
+    document.getElementById('hero-quote').innerHTML = content.heroQuote;
+    document.getElementById('challenge-tech').innerHTML = content.challenges.tech;
+    document.getElementById('challenge-player').innerHTML = content.challenges.player;
+    document.getElementById('challenge-ethical').innerHTML = content.challenges.ethical;
+    document.getElementById('breakthrough-tech').innerHTML = content.breakthroughs.tech;
+    document.getElementById('breakthrough-player').innerHTML = content.breakthroughs.player;
+    document.getElementById('breakthrough-ethical').innerHTML = content.breakthroughs.ethical;
+
+    // --- INTERACTIVE TABS --- //
+    const tabs = document.querySelectorAll('.tab');
+    const tabContentEl = document.getElementById('tab-content');
+
+    function updateTabs(activeTab) {
+        tabs.forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.tab === activeTab);
+        });
+        const tabData = content.tabData[activeTab];
+        tabContentEl.innerHTML = `<div class="bg-white/60 p-6 rounded-lg shadow-inner">
+            <h3 class="text-xl font-bold text-[#8C2D19] mb-4">${tabData.title}</h3>
+            <div class="leading-relaxed">${tabData.content}</div>
+        </div>`;
+    }
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => updateTabs(tab.dataset.tab));
+    });
+    updateTabs('1'); // Set initial tab
+
+    // --- FILTERABLE TAKEAWAYS --- //
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const takeawayContentEl = document.getElementById('takeaway-content');
+
+    function updateTakeaways(filter) {
+        filterBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.filter === filter);
+        });
+        const filteredData = filter === 'all' 
+            ? content.takeawayData 
+            : content.takeawayData.filter(item => item.category === filter);
+        
+        takeawayContentEl.innerHTML = filteredData.map(item => `
+            <div class="bg-white/80 p-5 rounded-lg shadow-sm flex items-start space-x-4">
+                <span class="text-[#D9A443] text-2xl mt-1">&#10003;</span>
+                <p class="text-gray-700 leading-relaxed">${item.text}</p>
+            </div>
+        `).join('');
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => updateTakeaways(btn.dataset.filter));
+    });
+    updateTakeaways('all'); // Set initial filter
+
+    // --- ACCORDION --- //
+    const accordionContainer = document.getElementById('accordion-container');
+    content.accordionData.forEach(item => {
+        const accordionItem = document.createElement('div');
+        accordionItem.className = 'border border-gray-200 rounded-lg bg-white/50';
+        accordionItem.innerHTML = `
+            <button class="accordion-header w-full text-left p-4 font-semibold text-lg text-gray-800 hover:bg-gray-100/50 transition duration-300 flex justify-between items-center">
+                <span>${item.title}</span>
+                <span class="transform transition-transform duration-300 text-[#D9A443]">&#9662;</span>
+            </button>
+            <div class="accordion-content bg-white">
+                <div class="p-4 border-t border-gray-200 leading-relaxed">${item.content}</div>
+            </div>
+        `;
+        accordionContainer.appendChild(accordionItem);
+    });
+
+    accordionContainer.addEventListener('click', (e) => {
+        const header = e.target.closest('.accordion-header');
+        if (!header) return;
+
+        const contentEl = header.nextElementSibling;
+        const icon = header.querySelector('span:last-child');
+        const isOpen = contentEl.style.maxHeight;
+
+        // Close all accordions
+        document.querySelectorAll('.accordion-content').forEach(el => el.style.maxHeight = null);
+        document.querySelectorAll('.accordion-header span:last-child').forEach(el => el.style.transform = 'rotate(0deg)');
+
+        // Open the clicked one if it was closed
+        if (!isOpen) {
+            contentEl.style.maxHeight = contentEl.scrollHeight + "px";
+            icon.style.transform = 'rotate(180deg)';
+        }
+    });
+
+    // --- CHART.JS DOUGHNUT CHART --- //
+    const ctx = document.getElementById('timeChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Design & Conception', 'Data Preparation', 'Building & Testing', 'Iterative Refinement'],
+            datasets: [{
+                label: 'Time Commitment (hours)',
+                data: [1.5, 3, 1.5, 2.5], // Example data based on 6-11 hour range
+                backgroundColor: [
+                    'rgba(217, 164, 67, 0.7)', // Gold
+                    'rgba(140, 45, 25, 0.7)',  // Red
+                    'rgba(58, 58, 58, 0.7)',    // Charcoal
+                    'rgba(166, 154, 131, 0.7)' // Beige
+                ],
+                borderColor: '#FDFBF5',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'bottom', labels: { font: { family: "'Roboto', sans-serif" } } },
+                title: { display: true, text: 'Estimated Project Hours Distribution', font: { size: 16, family: "'Roboto', sans-serif" } }
+            }
+        }
+    });
+
+    // --- ACTIVE NAV LINK ON SCROLL --- //
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('main section');
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (window.pageYOffset >= sectionTop - 150) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active', 'text-[#8C2D19]');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active', 'text-[#8C2D19]');
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>
